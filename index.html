@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESPERE! Seu pedido ainda não está concluído</title>
+
+  <!-- VTurb performance -->
+  <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
+  <link rel="preload" href="https://scripts.converteai.net/36b762f3-2374-4797-ac10-c765153a5c2d/players/6a19f0f60a1a9511c6a4d5b5/v4/player.js" as="script">
+  <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+  <link rel="preload" href="https://cdn.converteai.net/36b762f3-2374-4797-ac10-c765153a5c2d/6a19f0e923128d09f9413ec6/main.m3u8" as="fetch">
+  <link rel="dns-prefetch" href="https://cdn.converteai.net">
+  <link rel="dns-prefetch" href="https://scripts.converteai.net">
+  <link rel="dns-prefetch" href="https://images.converteai.net">
+  <link rel="dns-prefetch" href="https://license.vturb.com">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #0d0d0d;
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Urgency bar ── */
+    .urgency-bar {
+      background: linear-gradient(90deg, #c0392b, #e74c3c, #c0392b);
+      background-size: 200% auto;
+      animation: shimmer 3s linear infinite;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    @keyframes shimmer {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    /* ── Main wrapper ── */
+    .wrapper {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+    }
+
+    /* ── Headline block ── */
+    .headline-block {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .headline-tag {
+      display: inline-block;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+
+    .headline-main {
+      font-size: clamp(22px, 6vw, 30px);
+      font-weight: 900;
+      line-height: 1.25;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .headline-main span.highlight {
+      color: #f39c12;
+    }
+
+    .headline-sub {
+      font-size: clamp(14px, 4vw, 16px);
+      color: #cccccc;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .headline-sub strong {
+      color: #f39c12;
+    }
+
+    /* ── Video box ── */
+    .video-container {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 0 3px #e74c3c, 0 8px 40px rgba(231,76,60,0.35);
+      margin-bottom: 28px;
+    }
+
+    vturb-smartplayer {
+      display: block;
+      width: 100%;
+    }
+
+    /* ── Pulse badge ── */
+    .live-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 28px;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e74c3c;
+      animation: pulse 1.4s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.5); opacity: 0.6; }
+    }
+
+    /* ── CTA section (hidden until 1:47) ── */
+    #cta-section {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+    }
+
+    #cta-section.visible {
+      display: flex;
+      animation: fadeInUp 0.5s ease both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── CTA offer card ── */
+    .offer-card {
+      width: 100%;
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      border-radius: 16px;
+      padding: 20px 18px;
+      text-align: center;
+    }
+
+    .offer-card .offer-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #f39c12;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .offer-card .offer-title {
+      font-size: clamp(17px, 5vw, 22px);
+      font-weight: 900;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .offer-card .offer-desc {
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+
+    /* ── Accept button ── */
+    .button-accept {
+      display: block;
+      width: 100%;
+      padding: 18px 24px;
+      background: #34e23c;
+      color: #000;
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(16px, 4.5vw, 20px);
+      font-weight: 900;
+      text-align: center;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      line-height: 1.2;
+      text-decoration: none;
+      box-shadow: 0 6px 24px rgba(52,226,60,0.4);
+      animation: btnPulse 2s ease-in-out infinite;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .button-accept:active {
+      transform: scale(0.97);
+      box-shadow: 0 3px 12px rgba(52,226,60,0.3);
+    }
+
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 6px 24px rgba(52,226,60,0.4); }
+      50%       { box-shadow: 0 8px 36px rgba(52,226,60,0.7); }
+    }
+
+    .button-accept .btn-sub {
+      display: block;
+      font-size: 12px;
+      font-weight: 400;
+      margin-top: 3px;
+      opacity: 0.75;
+    }
+
+    /* ── Deny button ── */
+    .button-deny {
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #888;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 4px 8px;
+      transition: color 0.2s;
+    }
+
+    .button-deny:hover {
+      color: #bbb;
+    }
+
+    /* ── Guarantee strip ── */
+    .guarantee {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      border-radius: 10px;
+      padding: 12px 14px;
+      width: 100%;
+      font-size: 13px;
+      color: #ccc;
+      line-height: 1.4;
+    }
+
+    .guarantee .icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    /* ── Security badges ── */
+    .security-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      opacity: 0.5;
+    }
+
+    .security-row span {
+      font-size: 11px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Urgency bar -->
+  <div class="urgency-bar">
+    ⚠️ &nbsp;Não feche esta página — seu pedido ainda não foi finalizado!
+  </div>
+
+  <div class="wrapper">
+
+    <!-- Headline -->
+    <div class="headline-block">
+      <div class="headline-tag">Atenção — Passo importante</div>
+      <h1 class="headline-main">
+        ESPERE! Seu pedido ainda <span class="highlight">NÃO</span> está 100% concluído...
+      </h1>
+      <p class="headline-sub">
+        Não feche essa página ou você perderá o acesso aos seus moldes.<br>
+        <strong>Assista ao vídeo de 1 minuto abaixo</strong> para liberar seu acesso.
+      </p>
+    </div>
+
+    <!-- Video -->
+    <div class="video-container">
+      <vturb-smartplayer id="vid-6a19f0f60a1a9511c6a4d5b5" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
+    </div>
+
+    <!-- Live indicator -->
+    <div class="live-badge">
+      <div class="pulse-dot"></div>
+      <span>Seu acesso está sendo processado — assista até o final</span>
+    </div>
+
+    <!-- CTA section — shown at 1:47 -->
+    <div id="cta-section">
+
+      <div class="offer-card">
+        <div class="offer-label">Oferta exclusiva para você</div>
+        <div class="offer-title">Aproveite antes que essa página feche!</div>
+        <div class="offer-desc">Esta oportunidade está disponível apenas agora, enquanto seu pedido está sendo processado.</div>
+      </div>
+
+      <!-- Accept -->
+      <div id="llupsell-C5CDD0D9F-" class="button-accept">
+        ✅ Quero comprar agora!
+        <span class="btn-sub">Acesso imediato garantido</span>
+      </div>
+
+      <!-- Guarantee -->
+      <div class="guarantee">
+        <div class="icon">🔒</div>
+        <div>Compra 100% segura e protegida. Satisfação garantida ou seu dinheiro de volta.</div>
+      </div>
+
+      <!-- Deny -->
+      <button class="button-deny" id="denyButtonf57c232">
+        Não, obrigado — recusar esta oferta
+      </button>
+
+      <!-- Security -->
+      <div class="security-row">
+        <span>🔐 SSL Seguro</span>
+        <span>✅ Pagamento protegido</span>
+        <span>📦 Acesso imediato</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Lastlink upsell script -->
+  <script src="https://cdn.lastlink.com/upsell.min.js"></script>
+  <script>
+    var upsellRedirect = "https://lastlink.com/app/member/dashboardV2";
+
+    function setupDenyButtons() {
+      document.querySelectorAll('[id^="denyButton"]').forEach(function(button) {
+        button.onclick = function() {
+          var currentUrl = new URL(window.location.href);
+          var newUrl = new URL("https://lastlink.com/app/member/dashboardV2");
+          currentUrl.searchParams.forEach(function(value, key) {
+            newUrl.searchParams.append(key, value);
+          });
+          window.location.href = newUrl.toString();
+        };
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupDenyButtons);
+    } else {
+      setupDenyButtons();
+    }
+  </script>
+
+  <!-- VTurb player -->
+  <script type="text/javascript">
+    var s = document.createElement("script");
+    s.src = "https://scripts.converteai.net/36b762f3-2374-4797-ac10-c765153a5c2d/players/6a19f0f60a1a9511c6a4d5b5/v4/player.js";
+    s.async = !0;
+    document.head.appendChild(s);
+  </script>
+
+  <!-- Show CTA at 1:47 (107 seconds) -->
+  <script>
+    var ctaShown = false;
+
+    function showCTA() {
+      if (ctaShown) return;
+      ctaShown = true;
+      var section = document.getElementById('cta-section');
+      if (section) {
+        section.classList.add('visible');
+        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    // Method 1: VTurb smartplayer custom events
+    function attachPlayerEvents() {
+      var player = document.getElementById('vid-6a19f0f60a1a9511c6a4d5b5');
+      if (!player) return;
+
+      ['sc:timeupdate', 'timeupdate'].forEach(function(evtName) {
+        player.addEventListener(evtName, function(e) {
+          var t = (e.detail && (e.detail.seconds || e.detail.currentTime)) || 0;
+          if (t >= 107) showCTA();
+        });
+      });
+    }
+
+    // Method 2: Poll the internal video or player API every 500ms (reliable fallback)
+    var pollInterval = setInterval(function() {
+      var player = document.getElementById('vid-6a19f0f60a1a9511c6a4d5b5');
+      if (!player) return;
+
+      var currentTime = 0;
+
+      if (typeof player.getCurrentTime === 'function') {
+        currentTime = player.getCurrentTime();
+      } else if (player.shadowRoot) {
+        var vid = player.shadowRoot.querySelector('video');
+        if (vid) currentTime = vid.currentTime;
+      }
+
+      if (currentTime >= 107) {
+        showCTA();
+        clearInterval(pollInterval);
+      }
+    }, 500);
+
+    // Attach event listeners once DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attachPlayerEvents);
+    } else {
+      attachPlayerEvents();
+    }
+
+    // Also try after a short delay to catch late-loading player
+    setTimeout(attachPlayerEvents, 2000);
+  </script>
+
+</body>
+</html>
