@@ -408,60 +408,38 @@
       if (t >= 107) showCTA();
     }
 
-    // Method 1: listen at document level — VTurb fires composed events that bubble up
-    ['sc:timeupdate', 'timeupdate', 'sc:currenttime'].forEach(function(evtName) {
-      document.addEventListener(evtName, function(e) {
-        var t = e.detail
-          ? (e.detail.seconds || e.detail.currentTime || e.detail.time || 0)
-          : 0;
-        checkTime(t);
-      });
+    // Primary: video:timeupdate with {time: X} — confirmed event name from VTurb v4 source
+    // composed:true means it bubbles through shadow DOM up to document
+    document.addEventListener('video:timeupdate', function(e) {
+      if (e.detail && e.detail.time) checkTime(e.detail.time);
     });
 
-    // Method 2: listen directly on the player element (re-tried after load)
+    // Fallback: also listen on the player element directly
     function attachPlayerEvents() {
       var player = document.getElementById('vid-6a19f0f60a1a9511c6a4d5b5');
       if (!player) return;
-      ['sc:timeupdate', 'timeupdate', 'sc:currenttime'].forEach(function(evtName) {
-        player.addEventListener(evtName, function(e) {
-          var t = e.detail
-            ? (e.detail.seconds || e.detail.currentTime || e.detail.time || 0)
-            : 0;
-          checkTime(t);
-        });
+      player.addEventListener('video:timeupdate', function(e) {
+        if (e.detail && e.detail.time) checkTime(e.detail.time);
+      });
+      // video:timeupdate-ms fires on every millisecond change
+      player.addEventListener('video:timeupdate-ms', function(e) {
+        if (e.detail && e.detail.time) checkTime(e.detail.time);
       });
     }
 
-    // Method 3: recursive shadow DOM traversal to find the <video> element
-    function findVideo(root) {
-      if (!root) return null;
-      var vid = root.querySelector('video');
-      if (vid) return vid;
-      var all = root.querySelectorAll('*');
-      for (var i = 0; i < all.length; i++) {
-        if (all[i].shadowRoot) {
-          vid = findVideo(all[i].shadowRoot);
-          if (vid) return vid;
-        }
-      }
-      return null;
+    // Safety net: wait for custom element to be defined, then attach
+    if (typeof customElements !== 'undefined' && customElements.whenDefined) {
+      customElements.whenDefined('vturb-smartplayer').then(attachPlayerEvents);
     }
 
-    var pollInterval = setInterval(function() {
-      // Try player API first
-      var player = document.getElementById('vid-6a19f0f60a1a9511c6a4d5b5');
-      if (player && typeof player.getCurrentTime === 'function') {
-        checkTime(player.getCurrentTime());
-        return;
-      }
-      // Try finding <video> recursively through shadow roots
-      var vid = findVideo(document.body);
-      if (vid && vid.currentTime) {
-        checkTime(vid.currentTime);
-      }
-      // If CTA already shown, stop polling
-      if (ctaShown) clearInterval(pollInterval);
-    }, 500);
+    // Also attach after delays to cover async load scenarios
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attachPlayerEvents);
+    } else {
+      attachPlayerEvents();
+    }
+    setTimeout(attachPlayerEvents, 2000);
+    setTimeout(attachPlayerEvents, 5000);
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', attachPlayerEvents);
