@@ -404,48 +404,72 @@
       }
     }
 
-    // Method 1: VTurb smartplayer custom events
+    function checkTime(t) {
+      if (t >= 107) showCTA();
+    }
+
+    // Method 1: listen at document level — VTurb fires composed events that bubble up
+    ['sc:timeupdate', 'timeupdate', 'sc:currenttime'].forEach(function(evtName) {
+      document.addEventListener(evtName, function(e) {
+        var t = e.detail
+          ? (e.detail.seconds || e.detail.currentTime || e.detail.time || 0)
+          : 0;
+        checkTime(t);
+      });
+    });
+
+    // Method 2: listen directly on the player element (re-tried after load)
     function attachPlayerEvents() {
       var player = document.getElementById('vid-6a19f0f60a1a9511c6a4d5b5');
       if (!player) return;
-
-      ['sc:timeupdate', 'timeupdate'].forEach(function(evtName) {
+      ['sc:timeupdate', 'timeupdate', 'sc:currenttime'].forEach(function(evtName) {
         player.addEventListener(evtName, function(e) {
-          var t = (e.detail && (e.detail.seconds || e.detail.currentTime)) || 0;
-          if (t >= 107) showCTA();
+          var t = e.detail
+            ? (e.detail.seconds || e.detail.currentTime || e.detail.time || 0)
+            : 0;
+          checkTime(t);
         });
       });
     }
 
-    // Method 2: Poll the internal video or player API every 500ms (reliable fallback)
+    // Method 3: recursive shadow DOM traversal to find the <video> element
+    function findVideo(root) {
+      if (!root) return null;
+      var vid = root.querySelector('video');
+      if (vid) return vid;
+      var all = root.querySelectorAll('*');
+      for (var i = 0; i < all.length; i++) {
+        if (all[i].shadowRoot) {
+          vid = findVideo(all[i].shadowRoot);
+          if (vid) return vid;
+        }
+      }
+      return null;
+    }
+
     var pollInterval = setInterval(function() {
+      // Try player API first
       var player = document.getElementById('vid-6a19f0f60a1a9511c6a4d5b5');
-      if (!player) return;
-
-      var currentTime = 0;
-
-      if (typeof player.getCurrentTime === 'function') {
-        currentTime = player.getCurrentTime();
-      } else if (player.shadowRoot) {
-        var vid = player.shadowRoot.querySelector('video');
-        if (vid) currentTime = vid.currentTime;
+      if (player && typeof player.getCurrentTime === 'function') {
+        checkTime(player.getCurrentTime());
+        return;
       }
-
-      if (currentTime >= 107) {
-        showCTA();
-        clearInterval(pollInterval);
+      // Try finding <video> recursively through shadow roots
+      var vid = findVideo(document.body);
+      if (vid && vid.currentTime) {
+        checkTime(vid.currentTime);
       }
+      // If CTA already shown, stop polling
+      if (ctaShown) clearInterval(pollInterval);
     }, 500);
 
-    // Attach event listeners once DOM is ready
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', attachPlayerEvents);
     } else {
       attachPlayerEvents();
     }
-
-    // Also try after a short delay to catch late-loading player
     setTimeout(attachPlayerEvents, 2000);
+    setTimeout(attachPlayerEvents, 5000);
   </script>
 
 </body>
