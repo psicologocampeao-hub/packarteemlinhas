@@ -338,7 +338,7 @@
 
     <!-- Video -->
     <div class="video-container">
-      <vturb-smartplayer id="vid-6a4313bed6699b59ae99fc65" style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
+      <vturb-smartplayer id="vid-6a8484bc6e89b6bce9ae0f64" style="display: block; margin: 0 auto; width: 100%; max-width: 400px;"><div class="vturb-player-placeholder" style="position: relative; width: 100%; padding: 177.77777777777777% 0 0; z-index: 0; background-color: black;"></div></vturb-smartplayer>
     </div>
 
     <!-- Live indicator -->
@@ -412,7 +412,7 @@
   <!-- VTurb player -->
   <script type="text/javascript">
     var s = document.createElement("script");
-    s.src = "https://scripts.converteai.net/572fa32c-4ee5-40cd-9dc7-8bf3d55a68e1/players/6a4313bed6699b59ae99fc65/v4/player.js";
+    s.src = "https://scripts.converteai.net/22b10f2a-f497-4f37-9fc1-89fb48c94c54/players/6a8484bc6e89b6bce9ae0f64/v4/player.js";
     s.async = !0;
     document.head.appendChild(s);
   </script>
@@ -443,7 +443,7 @@
 
     // Fallback: also listen on the player element directly
     function attachPlayerEvents() {
-      var player = document.getElementById('vid-6a4313bed6699b59ae99fc65');
+      var player = document.getElementById('vid-6a8484bc6e89b6bce9ae0f64');
       if (!player) return;
       player.addEventListener('video:timeupdate', function(e) {
         if (e.detail && e.detail.time) checkTime(e.detail.time);
